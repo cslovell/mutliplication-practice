@@ -390,11 +390,7 @@ const MultiplicationGame: React.FC = () => {
             <div
               key={emoji.id}
               className="floating-emoji"
-              style={{
-                left: `${emoji.x}%`,
-                top: `${emoji.y}%`,
-                fontSize: '2rem'
-              }}
+              style={emojiStyle(emoji)}
             >
               {emoji.emoji}
             </div>
