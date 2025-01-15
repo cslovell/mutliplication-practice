@@ -287,6 +287,7 @@ const MultiplicationGame: React.FC = () => {
     } else {
       setStreak(0);
       setFeedback('Try again! You can do it!');
+      setUserAnswer('');
       setShowAnswer(false);
     }
   };
