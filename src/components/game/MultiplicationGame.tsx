@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Star } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LabelList } from 'recharts';
 
 
@@ -38,12 +37,12 @@ const MultiplicationGame: React.FC = () => {
   const [performanceData, setPerformanceData] = useState<PerformanceData>({});
   const [showStats, setShowStats] = useState<boolean>(false);
   const [gameStatus, setGameStatus] = useState<GameStatus>('waiting');
-  const [isPaused, setIsPaused] = useState<boolean>(false);
+  // const [isPaused, setIsPaused] = useState<boolean>(false);
   const [pauseStartTime, setPauseStartTime] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
 
-  const [isWindowFocused, setIsWindowFocused] = useState(document.hasFocus());
+  const [isWindowFocused, setIsWindowFocused] = useState<boolean>(true);
 
   // Add these new state variables after the existing useState declarations
   const [problemQueue, setProblemQueue] = useState<Array<[number, number]>>([]);
@@ -88,6 +87,8 @@ const MultiplicationGame: React.FC = () => {
   }, [gameStatus]);
 
   useEffect(() => {
+    setIsWindowFocused(document.hasFocus());
+
     const handleFocus = () => setIsWindowFocused(true);
     const handleBlur = () => setIsWindowFocused(false);
 
@@ -322,7 +323,7 @@ const MultiplicationGame: React.FC = () => {
     <Card className="w-full max-w-4xl mx-auto bg-white shadow-lg">
       <CardContent className="p-6">
         <div className="text-center mb-6">
-          <div className="text-2xl font-bold mb-2">John Lovell's Multiplication Practice</div>
+          <div className="text-2xl font-bold mb-2">John Lovell&apos;s  Multiplication Practice</div>
           <div className="flex justify-center items-center gap-2">
             <span className="text-lg">Score: {score}</span>
             {/* <div className="flex items-center ml-4">
