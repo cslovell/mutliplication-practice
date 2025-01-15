@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LabelList } from 'recharts';
+import ReactConfetti from 'react-confetti';
 
 
 interface PerformanceData {
@@ -19,6 +20,13 @@ interface StatsData {
   problem: string;
   averageTime: string;
   attempts: number;
+}
+
+interface AnimatedEmoji {
+  id: number;
+  emoji: string;
+  x: number;
+  y: number;
 }
 
 type GameStatus = 'waiting' | 'playing';
@@ -40,6 +48,8 @@ const MultiplicationGame: React.FC = () => {
   // const [isPaused, setIsPaused] = useState<boolean>(false);
   const [pauseStartTime, setPauseStartTime] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [animatedEmojis, setAnimatedEmojis] = useState<AnimatedEmoji[]>([]);
 
 
   const [isWindowFocused, setIsWindowFocused] = useState<boolean>(true);
@@ -205,6 +215,27 @@ const MultiplicationGame: React.FC = () => {
     });
   };
 
+  const triggerReward = () => {
+    // Show confetti
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 2000);
+
+    // Add floating emojis
+    const emojis = ['🌟', '⭐', '🎉', '🎈', '🎊', '👏', '🌈'];
+    const newEmoji: AnimatedEmoji = {
+      id: Date.now(),
+      emoji: emojis[Math.floor(Math.random() * emojis.length)],
+      x: Math.random() * 80 + 10, // Random position 10-90%
+      y: 50 // Start at middle
+    };
+    setAnimatedEmojis(prev => [...prev, newEmoji]);
+
+    // Remove emoji after animation
+    setTimeout(() => {
+      setAnimatedEmojis(prev => prev.filter(e => e.id !== newEmoji.id));
+    }, 1000);
+  };
+
 
   // Modify the generateNewProblem function
   const generateNewProblem = () => {
@@ -247,10 +278,11 @@ const MultiplicationGame: React.FC = () => {
     updatePerformanceData(num1, num2, timeSpent, isCorrect);
     ;
 
-    if (userNum === correctAnswer) {
+    if (isCorrect) {
       setScore(score + 1);
       setStreak(streak + 1);
       setFeedback('Correct! 🌟');
+      triggerReward();
       setTimeout(generateNewProblem, 20);
     } else {
       setStreak(0);
@@ -291,6 +323,15 @@ const MultiplicationGame: React.FC = () => {
     }
   };
 
+  const emojiStyle = (emoji: AnimatedEmoji) => ({
+    position: 'fixed' as const,
+    left: `${emoji.x}%`,
+    top: `${emoji.y}%`,
+    animation: 'float-up 1s ease-out',
+    fontSize: '2rem',
+    pointerEvents: 'none' as const,
+  });
+
   const getStatsData = (): StatsData[] => {
     if (!focusNumber) return [];
 
@@ -330,7 +371,7 @@ const MultiplicationGame: React.FC = () => {
         <div className="text-center mb-6">
           <div className="text-2xl font-bold mb-2">John Lovell&apos;s  Multiplication Practice</div>
           <div className="flex justify-center items-center gap-2">
-            <span className="text-lg">Score: {score}</span>
+            <span className="text-lg score">Score: {score}</span>
             {/* <div className="flex items-center ml-4">
               {[...Array(streak)].map((_, i) => (
                 <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
@@ -338,6 +379,27 @@ const MultiplicationGame: React.FC = () => {
             </div> */}
           </div>
         </div>
+
+        <>
+          {showConfetti && <ReactConfetti
+            recycle={false}
+            numberOfPieces={streak > 5 ? 500 : 200}
+            gravity={0.3}
+          />}
+          {animatedEmojis.map(emoji => (
+            <div
+              key={emoji.id}
+              className="floating-emoji"
+              style={{
+                left: `${emoji.x}%`,
+                top: `${emoji.y}%`,
+                fontSize: '2rem'
+              }}
+            >
+              {emoji.emoji}
+            </div>
+          ))}
+        </>
 
         <div className="mb-6">
           <div className="text-center mb-2 text-gray-600">Select a table to practice:</div>
@@ -432,7 +494,7 @@ const MultiplicationGame: React.FC = () => {
         </div>
 
         <div className="text-center mb-6">
-          <div className="text-lg font-medium text-blue-600">{feedback}</div>
+          <div className="text-lg font-medium text-blue-600 feedback">{feedback}</div>
           {showAnswer && (
             <div className="text-gray-600 mt-2">
               The answer is {num1 * num2}
