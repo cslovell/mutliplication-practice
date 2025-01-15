@@ -370,7 +370,7 @@ const MultiplicationGame: React.FC = () => {
     <Card className="w-full max-w-4xl mx-auto bg-white shadow-lg">
       <CardContent className="p-6">
         <div className="text-center mb-6">
-          <div className="text-2xl font-bold mb-2">John Lovell&apos;s  Multiplication Practice</div>
+          <div className="text-2xl font-bold mb-2">John&apos;s  Multiplication Practice</div>
           <div className="flex justify-center items-center gap-2">
             <span className="text-lg score">Score: {score}</span>
             {/* <div className="flex items-center ml-4">
