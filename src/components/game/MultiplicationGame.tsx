@@ -255,7 +255,7 @@ const MultiplicationGame: React.FC = () => {
     } else {
       setStreak(0);
       setFeedback('Try again! You can do it!');
-      setShowAnswer(true);
+      setShowAnswer(false);
     }
   };
 
@@ -384,7 +384,9 @@ const MultiplicationGame: React.FC = () => {
               </div>
               <input
                 ref={inputRef}
-                type="text"
+                type="number"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 value={userAnswer}
                 onChange={(e) => {
                   // Only allow numbers
@@ -397,9 +399,18 @@ const MultiplicationGame: React.FC = () => {
                     checkAnswer();
                   }
                 }}
-                className="w-24 text-center text-2xl p-2 border rounded [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                placeholder="?"
-                maxLength={3}
+                className="w-24 text-center text-2xl p-2 border rounded 
+    [appearance:textfield] 
+    [&::-webkit-outer-spin-button]:appearance-none 
+    [&::-webkit-inner-spin-button]:appearance-none
+    bg-gray-50 
+    focus:bg-white 
+    focus:ring-2 
+    focus:ring-blue-500 
+    focus:outline-none"                placeholder="?"
+                maxLength={5}
+                min="0"
+                max="99999"
               />
             </>
           )}
