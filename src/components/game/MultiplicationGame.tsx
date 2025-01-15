@@ -49,6 +49,11 @@ const MultiplicationGame: React.FC = () => {
   const [isUsingPerformanceData, setIsUsingPerformanceData] = useState<boolean>(false);
 
 
+  const handleStartGame = () => {
+    console.log('Starting game...');
+    setGameStatus('playing');
+  };
+
   useEffect(() => {
     const handleFocus = () => {
       setIsWindowFocused(true);
@@ -361,8 +366,16 @@ const MultiplicationGame: React.FC = () => {
               Click here to focus the window first!
             </div>
           ) : gameStatus === 'waiting' ? (
-            <div className="text-xl text-green-500 mb-4">
-              Press Enter to Start!
+            <div>
+              <div className="text-xl text-green-500 mb-4">
+                Press Enter or tap Start to begin!
+              </div>
+              <Button
+                onClick={handleStartGame}
+                className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 text-xl"
+              >
+                Start Game
+              </Button>
             </div>
           ) : (
             <>
