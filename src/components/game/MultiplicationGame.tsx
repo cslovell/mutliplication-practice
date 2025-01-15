@@ -58,6 +58,11 @@ const MultiplicationGame: React.FC = () => {
   const [problemQueue, setProblemQueue] = useState<Array<[number, number]>>([]);
   const [isUsingPerformanceData, setIsUsingPerformanceData] = useState<boolean>(false);
 
+  const focusInput = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
 
   const handleStartGame = () => {
     console.log('Starting game...');
@@ -265,6 +270,7 @@ const MultiplicationGame: React.FC = () => {
     setShowAnswer(false);
     setFeedback('');
     setQuestionStartTime(Date.now());
+    focusInput();
   };
 
   const checkAnswer = () => {
@@ -284,11 +290,13 @@ const MultiplicationGame: React.FC = () => {
       setFeedback('Correct! 🌟');
       triggerReward();
       setTimeout(generateNewProblem, 20);
+      focusInput();
     } else {
       setStreak(0);
       setFeedback('Try again! You can do it!');
       setUserAnswer('');
       setShowAnswer(false);
+      focusInput();
     }
   };
 
